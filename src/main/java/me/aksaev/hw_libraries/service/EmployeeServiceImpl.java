@@ -3,11 +3,15 @@ package me.aksaev.hw_libraries.service;
 import me.aksaev.hw_libraries.exception.EmployeeAlreadyAddedException;
 import me.aksaev.hw_libraries.exception.EmployeeNotFoundException;
 import me.aksaev.hw_libraries.exception.EmployeeStorageIsFullException;
+import me.aksaev.hw_libraries.exception.InvalidInputException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import me.aksaev.hw_libraries.model.Employee;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.apache.commons.lang3.StringUtils.*;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -16,6 +20,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee add(String name, String surname, int department, int salary) {
+        validateInput(name, surname);
+
         Employee employee = new Employee(name, surname, department, salary);
         if (employees.contains(employee)) {
             throw new EmployeeAlreadyAddedException();
@@ -29,6 +35,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee remove(String name, String surname, int department, int salary) {
+        validateInput(name, surname);
+
         Employee employee = new Employee(name, surname, department, salary);
         if (!employees.contains(employee)) {
             throw new EmployeeNotFoundException();
@@ -39,6 +47,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee find(String name, String surname, int department, int salary) {
+        validateInput(name, surname);
+
         Employee employee = new Employee(name, surname, department, salary);
         if (!employees.contains(employee)) {
             throw new EmployeeNotFoundException();
@@ -50,6 +60,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<Employee> getAll() {
         return new ArrayList<>(employees);
+    }
+
+    private void validateInput(String name, String surname) {
+        if (!(isAlpha(name) && isAlpha(surname))) {
+            throw new InvalidInputException();
+        }
     }
 
 
