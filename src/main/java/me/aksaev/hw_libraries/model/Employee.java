@@ -1,8 +1,11 @@
 package me.aksaev.hw_libraries.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
+
+import static org.apache.commons.lang3.StringUtils.*;
 
 public class Employee {
     @JsonProperty("firstName")
@@ -13,8 +16,8 @@ public class Employee {
     private int salary;
 
     public Employee(String name, String surname, int department, int salary) {
-        this.name = name;
-        this.surname = surname;
+        this.name = capitalize(name.toLowerCase());
+        this.surname = capitalize(surname.toLowerCase());
         this.department = department;
         this.salary = salary;
     }
